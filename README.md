@@ -113,7 +113,7 @@ ratings = s
 score = -9999999
 ```
 
-## [Reccommended] API Authentication.
+## [Recommended] API Authentication.
 
 In the config file there is a "[Api]" section where you enter both your user name and Api key/Password hash.
 
