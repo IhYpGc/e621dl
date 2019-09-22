@@ -1,5 +1,10 @@
 [![Github All Releases](https://img.shields.io/github/downloads/wulfre/e621dl/total.svg)](https://github.com/Wulfre/e621dl/releases/latest)
 
+# The main reason for this fork.
+
+I prefered this format of the config.ini and layout of the GUI (if you can even call it that) but wanted a version with Authentication so I could use wildcards in searches as wildcards now require an account.
+
+
 # What is **e621dl**?
 
 **e621dl** is an automated script, originally by [**@wwyaiykycnf**](https://github.com/wwyaiykycnf), which downloads images from e621.net. It can be used to create a local mirror of your favorite searches, and keep these searches up to date as new posts are uploaded.
@@ -15,12 +20,12 @@ Once it knows these things, it goes through the searches one by one, and downloa
 
 # Installing and Setting Up **e621dl**
 
-- Download [the latest executable release of **e621dl**](https://github.com/wulfre/e621dl/releases).
+- Download [the latest executable release of **e621dl**](https://github.com/IhYpGc/e621dl/releases).
 
 *or*
 
 - Download and install [the latest release of Python 3](https://www.python.org/downloads/).
-- Download [the latest *source* release of **e621dl**](https://github.com/wulfre/e621dl/releases).
+- Download [the latest *source* release of **e621dl**](https://github.com/IhYpGc/e621dl/releases).
     - Decompress the archive into any directory you would like.
 
 # Running **e621dl**
@@ -45,7 +50,7 @@ Open your command shell in the directory you decompressed e621dl into, and run t
 The first time you run **e621dl**, you will see the following errors:
 
 ```
-e621dl      INFO     Running e621dl version X.X.X -- Forked from 2.4.6.
+e621dl      INFO     Running e621dl version X.X.X.
 local       ERROR    No config file found.
 local       INFO     New default config file created. Please add tag groups to this file.
 ```
@@ -80,7 +85,7 @@ The following characters are not allowed in search group names: `\`, `:`, `*`, `
 
 Commas should be used to separate tags and ratings, but this is not strictly enforced in current versions of **e621dl**.
 
-One side effect of the workaround used to search an unlimited number tags is that you may only use up to 4 meta tags `:`, negative tags `-`, operational tags `~`, or wildcard tags `*` per group, and they must be the first 4 items in the group. See [the e621 cheatsheet](https://e621.net/help/show/cheatsheet) for more information on these special types of tags.
+One side effect of the workaround used to search an unlimited number tags is that you may only use up to 4 meta tags `:`, negative tags `-`, operational tags `~`, or wildcard tags `*` (see API Authentication) per group, and they must be the first 4 items in the group. See [the e621 cheatsheet](https://e621.net/help/show/cheatsheet) for more information on these special types of tags.
 
 ### Search Group Keys, Values, and Descriptions
 
@@ -107,6 +112,15 @@ days = 1
 ratings = s
 score = -9999999
 ```
+
+## [Reccommended] API Authentication.
+
+In the config file there is a "[Api]" section where you enter both your user name and Api key/Password hash.
+
+You need an account to use this feature and wildcards won't funtion without it.
+
+you can generate a api key at https://e621.net/user/api_key and the username is just your e621 username (I am not sure that it's case sensitive or not but assume it is.)
+
 
 ## Normal Operation
 
@@ -144,4 +158,4 @@ It should be recognized that **e621dl**, as a script, can be scheduled to run as
 
 # Feedback and Requests
 
-If you have any ideas on how to make this script run better, or for features you would like to see in the future, [open an issue](https://github.com/Wulfre/e621dl/issues) and I will try to read it as soon as possible.
+If you have any ideas on how to make this script run better, or for features you would like to see in the future, [open an issue](https://github.com/IhYpGc/e621dl/issues) and I will try to read it as soon as possible.
