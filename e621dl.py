@@ -165,7 +165,7 @@ if __name__ == '__main__':
                     print('Please read through API section of the README.MD also availble at https://github.com/IhYpGc/e621dl')
                     print('')
                     input("Press Enter to goto the readme...")
-                    webbrowser.open_new_tab('https://github.com/IhYpGc/e621dl/blob/master/README.md')
+                    webbrowser.open_new_tab('https://github.com/IhYpGc/e621dl/blob/master/README.md#recommended-api-authentication')
                     raise SystemExit
                 
                 # Gets the id of the last post found in the search so that the search can continue.
