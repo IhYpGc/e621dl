@@ -1,4 +1,4 @@
-[![Github All Releases](https://img.shields.io/github/downloads/wulfre/e621dl/total.svg)](https://github.com/Wulfre/e621dl/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/IhYpGc/e621dl/total.svg)](https://github.com/IhYpGc/e621dl/releases/latest)
 
 # The main reason for this fork.
 
