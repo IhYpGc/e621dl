@@ -36,7 +36,7 @@ def print_log(module, log_level, log_message):
 def make_config():
     with open('config.ini', 'wt', encoding = 'utf_8_sig') as outfile:
         outfile.write(constants.DEFAULT_CONFIG_TEXT)
-        print_log('local', 'info', 'New default config file created. Please add tag groups to this file.')
+        print_log('local', 'info', 'New default config file created. Please edit this file.')
 
     raise SystemExit
 

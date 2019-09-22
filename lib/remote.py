@@ -15,39 +15,40 @@ def delayed_post(url, payload, session):
 
     # If the response took less than 0.5 seconds (only 2 requests are allowed per second as per the e621 API)
     # Wait for the rest of the 0.5 seconds.
-    if elapsed < 1:
-        sleep(1 - elapsed)
+    if elapsed < 0.5:
+        sleep(0.5 - elapsed)
 
     return response
 
 def get_github_release(session):
-    url = 'https://api.github.com/repos/wulfre/e621dl/releases/latest'
+    url = 'https://api.github.com/repos/IhYpGc/e621dl/releases/latest'
 
     response = session.get(url)
     response.raise_for_status()
 
     return response.json()['tag_name'].strip('v')
 
-def get_posts(search_string, min_score, earliest_date, last_id, session):
+def get_posts(search_string, min_score, earliest_date, last_id, session, api_username, api_hash):
     url = 'https://e621.net/post/index.json'
     payload = {
-		'login': constants.LOGIN,
-		'password_hash': constants.API_KEY,
+		'login': api_username,
+		'password_hash': api_hash,
         'limit': constants.MAX_RESULTS,
         'before_id': str(last_id),
         'tags': 'score:>=' + str(min_score) + ' ' + 'date:>=' + str(earliest_date) + ' ' + search_string
     }
 
     response = delayed_post(url, payload, session)
-    response.raise_for_status()
-
+    if response.status_code == 403:
+        return 403
+    else:
+        response.raise_for_status()
+    
     return response.json()
 
 def get_known_post(post_id, session):
     url = 'https://e621.net/post/show.json'
     payload = {
-		'login': constants.LOGIN,
-		'password_hash': constants.API_KEY,
 		'id': post_id
 	}
 
@@ -56,7 +57,7 @@ def get_known_post(post_id, session):
 
     return response.json()
 
-def get_tag_alias(user_tag, session):
+def get_tag_alias(user_tag, session, api_username, api_hash):
     prefix = ''
 
     if ':' in user_tag:
@@ -72,8 +73,8 @@ def get_tag_alias(user_tag, session):
 
     url = 'https://e621.net/tag/index.json'
     payload = {
-		'login': constants.LOGIN,
-		'password_hash': constants.API_KEY,
+		'login': api_username,
+		'password_hash': api_hash,
 		'name': user_tag
 	}
 
@@ -91,8 +92,8 @@ def get_tag_alias(user_tag, session):
 
     url = 'https://e621.net/tag_alias/index.json'
     payload = {
-		'login': constants.LOGIN,
-		'password_hash': constants.API_KEY,
+		'login': api_username,
+		'password_hash': api_hash,
 		'approved': 'true',
 		'query': user_tag
 	}
@@ -106,8 +107,8 @@ def get_tag_alias(user_tag, session):
         if user_tag == tag['name']:
             url = 'https://e621.net/tag/show.json'
             payload = {
-				'login': constants.LOGIN,
-				'password_hash': constants.API_KEY,
+				'login': api_username,
+				'password_hash': api_hash,
 				'id': str(tag['alias_id'])
 			}
 

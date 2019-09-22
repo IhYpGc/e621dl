@@ -1,10 +1,10 @@
-VERSION = '4.4.1'
-VERSION_NOTE = 'Forked from 2.4.6'
+VERSION = '4.4.5'
+VERSION_NOTE = '4.4.5(IhYpGc), Forked from 4.4.1(Wulfre), Forked from 2.4.6(???)'
 
 LOGGER_FORMAT = '%(name)-11s %(levelname)-8s %(message)s'
 DATE_FORMAT = '%Y-%m-%d'
 
-USER_AGENT = 'e621dl (Wulfre) -- Version ' + VERSION
+USER_AGENT = 'e621dl (Wulfre?) -- Version ' + VERSION
 MAX_RESULTS = 320
 PARTIAL_DOWNLOAD_EXT = 'request'
 
@@ -15,6 +15,10 @@ DEFAULT_CONFIG_TEXT = ''';;;;;;;;;;;;;;
 
 [Other]
 include_md5 = false
+
+[Api]
+username =
+api_key =
 
 [Defaults]
 days = 1
@@ -36,8 +40,8 @@ tags =
 ; tags = tag1, tag2, tag3, ...
 
 ; Example:
-; [Cute Cats]
+; [snake]
 ; days = 30
 ; ratings = s
-; min_score = 5
-; tags = cat, cute'''
+; min_score = -100
+; tags = snake'''
