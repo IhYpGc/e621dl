@@ -2,6 +2,7 @@
 import os
 from distutils.version import StrictVersion
 from fnmatch import fnmatch
+import webbrowser
 
 # External Imports
 import requests
@@ -22,10 +23,10 @@ if __name__ == '__main__':
         local.init_log()
 
         # Check if a new version is released on github. If so, notify the user.
-        if StrictVersion(constants.VERSION) < StrictVersion(remote.get_github_release(session)):
-            local.print_log('e621dl', 'info', 'A NEW VERSION OF E621DL IS AVAILABLE ON GITHUB: (https://github.com/Wulfre/e621dl/releases/latest).')
+        '''if StrictVersion(constants.VERSION) < StrictVersion(remote.get_github_release(session)):
+            local.print_log('e621dl', 'info', 'A NEW VERSION OF E621DL IS AVAILABLE ON GITHUB: (https://github.com/IhYpGc/e621dl/releases/latest).')'''
 
-        local.print_log('e621dl', 'info', 'Running e621dl version ' + constants.VERSION + '.')
+        local.print_log('e621dl', 'info', 'Running e621dl version ' + constants.VERSION_NOTE + '.')
 
         print('')
 
@@ -45,6 +46,8 @@ if __name__ == '__main__':
 
         # Initialize user configured options in case any are missing.
         include_md5 = False # The md5 checksum is not appended to file names.
+        api_username = '' # username for api authentication.
+        api_hash = '' # password hash for api authentication.
         default_date = local.get_date(1) # Get posts from one day before execution.
         default_score = -0x7FFFFFFF # Allow posts of any score to be downloaded.
         default_ratings = ['s, q, e'] # Allow only safe posts to be downloaded.
@@ -59,6 +62,14 @@ if __name__ == '__main__':
                         if value.lower() == 'true':
                             include_md5 = True
 
+            # Get values from the "Api" section. Used for authenticating with the api
+            elif section.lower() == 'api':
+                for option, value in config.items(section):
+                    if option.lower() in {'username'}:
+                        api_username = value
+                    elif option.lower() in {'api_key'}:
+                        api_hash = value
+
             # Get values from the "Defaults" section. This overwrites the initialized default_* variables.
             elif section.lower() == 'defaults':
                 for option, value in config.items(section):
@@ -71,7 +82,7 @@ if __name__ == '__main__':
 
             # Get values from the "Blacklist" section. Tags are aliased to their acknowledged names.
             elif section.lower() == 'blacklist':
-                blacklist = [remote.get_tag_alias(tag.lower(), session) for tag in config.get(section, 'tags').replace(',', ' ').lower().strip().split()]
+                blacklist = [remote.get_tag_alias(tag.lower(), session, api_username, api_hash) for tag in config.get(section, 'tags').replace(',', ' ').lower().strip().split()]
 
             # If the section name is not one of the above, it is assumed to be the values for a search.
             else:
@@ -89,7 +100,7 @@ if __name__ == '__main__':
 
                     # Get the tags that will be searched for. Tags are aliased to their acknowledged names.
                     if option.lower() in {'tags', 'tag'}:
-                        section_tags = [remote.get_tag_alias(tag.lower(), session) for tag in value.replace(',', ' ').lower().strip().split()]
+                        section_tags = [remote.get_tag_alias(tag.lower(), session, api_username, api_hash) for tag in value.replace(',', ' ').lower().strip().split()]
 
                     # Overwrite default options if the user has a specific value for the section
                     elif option.lower() in {'days_to_check', 'days'}:
@@ -147,8 +158,16 @@ if __name__ == '__main__':
 
             # Sets up a loop that will continue indefinitely until the last post of a search has been found.
             while True:
-                results = remote.get_posts(search_string, min_score, earliest_date, last_id, session)
+                results = remote.get_posts(search_string, min_score, earliest_date, last_id, session, api_username, api_hash)
 
+                if results == 403:
+                    print('A 403 Forbidden error has ocurred, There is a high chance that you have attempted to use a wildcard "*"')
+                    print('Please read through API section of the README.MD also availble at https://github.com/IhYpGc/e621dl')
+                    print('')
+                    input("Press Enter to goto the readme...")
+                    webbrowser.open_new_tab('https://github.com/IhYpGc/e621dl/blob/master/README.md')
+                    raise SystemExit
+                
                 # Gets the id of the last post found in the search so that the search can continue.
                 # If the number of results is less than the max, the next searches will always return 0 results.
                 # Because of this, the last id is set to 0 which is the base case for exiting the while loop.
