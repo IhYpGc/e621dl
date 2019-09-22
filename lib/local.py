@@ -37,6 +37,7 @@ def make_config():
     with open('config.ini', 'wt', encoding = 'utf_8_sig') as outfile:
         outfile.write(constants.DEFAULT_CONFIG_TEXT)
         print_log('local', 'info', 'New default config file created. Please edit this file.')
+        input('Press enter to end the program...')
 
     raise SystemExit
 
